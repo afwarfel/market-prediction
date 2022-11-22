@@ -1,2 +1,2 @@
-# market-prediction
-Various market prediction projects.
+# Portfolio
+Here lies some scripts from various projects that I have worked on.
