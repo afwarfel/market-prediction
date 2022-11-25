@@ -1,5 +1,6 @@
 from joblib import dump, load
 import os
+from os import path
 from credentials import credentials
 from generate_training_data import capture_fred_series
 import ta
@@ -13,13 +14,11 @@ def solicit_inferences():
 
     model = load(os.path.join('data', 'random_forest_classifier.joblib'))
 
-    credentials = credentials()
-
     fred_series_to_capture = ['DFF', 'BAMLH0A0HYM2',
                             'DCOILWTICO', 'VIXCLS', 'T10Y3M', 'NASDAQCOM']
 
     dataset = capture_fred_series(
-        fred_series_to_capture=fred_series_to_capture, fred_api_key=credentials['FRED API Key'][0])
+        fred_series_to_capture=fred_series_to_capture, fred_api_key=credentials()['FRED API Key'][0])
 
     dataset.set_index(keys='date', inplace=True, drop=True, verify_integrity=True)
     dataset['month'] = dataset.index.month
@@ -61,7 +60,25 @@ def solicit_inferences():
     dataset = dataset[trained_columns]
     most_recent_records = dataset.tail(1)
 
-
     prediction = model.predict(most_recent_records)
 
+    if path.exists(os.path.join('data', 'prediction.csv')):
+        prediction_df = pd.read_csv(os.path.join('data', 'prediction.csv'))
+        prediction_df['date'] = pd.to_datetime(prediction_df['date'])
+
+        if most_recent_records.index[0] in prediction_df['date'].values:
+            print('Prediction already exists')
+        else:
+            prediction_df = prediction_df.append(
+                {'date': most_recent_records.index[0], 'prediction': prediction[0]}, ignore_index=True)
+    else:
+        prediction_df = pd.DataFrame(
+            {'date': most_recent_records.index, 'prediction': prediction})
+
+    prediction_df.to_csv(os.path.join('data', 'prediction.csv'), index=False)
+
+    print(prediction_df)
+
     return prediction
+
+solicit_inferences()
