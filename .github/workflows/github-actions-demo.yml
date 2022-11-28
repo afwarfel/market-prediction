@@ -23,11 +23,11 @@ jobs:
         with:
           python-version: 3.9.10 #install the python needed
       - name: install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          ref: # branch
-            main
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        ref: # branch
+          main
       - name: solicit predictions # run file
         run: |
           python3 machine_learning/solicit_inferences.py
