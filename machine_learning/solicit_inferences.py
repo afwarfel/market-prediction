@@ -13,7 +13,10 @@ def solicit_inferences(fred_api_key):
                     'nasdaqcom_trix', 'nasdaqcom_sma_26', 'nasdaqcom_sma_12', 'nasdaqcom_sma_9', 'nasdaqcom_log', 't10y3m_aroon_indicator', 't10y3m_ema_indicator', 't10y3m_macd_diff', 't10y3m_trix', 't10y3m_sma_26', 't10y3m_sma_12', 't10y3m_sma_9', 't10y3m_diff', 'month_aroon_indicator', 'month_ema_indicator', 'month_macd_diff', 'month_trix', 'month_sma_26', 'month_sma_12', 'month_sma_9', 'month_diff', 'weekday_aroon_indicator', 'weekday_ema_indicator', 'weekday_macd_diff', 'weekday_trix', 'weekday_sma_26', 'weekday_sma_12', 'weekday_sma_9', 'weekday_diff', 'quarter_aroon_indicator', 'quarter_ema_indicator', 'quarter_macd_diff', 'quarter_trix', 'quarter_sma_26', 'quarter_sma_12', 'quarter_sma_9', 'quarter_diff', 'week_aroon_indicator', 'week_ema_indicator', 'week_macd_diff', 'week_trix', 'week_sma_26', 'week_sma_12', 'week_sma_9', 'week_diff']
 
     print('Current working directory is: ',os.getcwd())
-    model = load(os.path.join('data', 'random_forest_classifier.joblib'))
+    try:
+        model = load(os.path.join('data', 'random_forest_classifier.joblib'))
+    except:
+        model = load(os.path.join('machine_learning', 'data', 'random_forest_classifier.joblib'))
 
     fred_series_to_capture = ['DFF', 'BAMLH0A0HYM2',
                             'DCOILWTICO', 'VIXCLS', 'T10Y3M', 'NASDAQCOM']
