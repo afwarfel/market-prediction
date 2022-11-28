@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 /machine_learning/data/*
+!/machine_learning/data/*.joblib
 
 # C extensions
 *.so
