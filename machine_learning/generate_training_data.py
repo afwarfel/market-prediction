@@ -90,18 +90,16 @@ def retrieve_fred_data(fred_api_key, fred_series):
     data = data.set_axis(['date', fred_series.lower()], axis=1)
     return data
 
-credentials = credentials()
-
-fred_series_to_capture = ['T10Y2Y','DFF','BAMLH0A0HYM2','SP500','BAMLH0A0HYM2EY','DCOILWTICO','DTWEXBGS','VIXCLS','DJIA','NASDAQCOM','T10Y3M']
-
-dataset = capture_fred_series(fred_series_to_capture=fred_series_to_capture, fred_api_key=credentials['FRED API Key'][0])
-
-# Verify integrity just checks that the dataframe has no duplicate dates
-dataset.set_index(keys='date', inplace=True, drop=True, verify_integrity=True)
-# Remove all weekends from the data set since they are irrelevant
-dataset = dataset[dataset.index.dayofweek < 5]
-
-dataset.to_csv(os.path.join('data','dataset_raw.csv'))
-
 if __name__ == '__main__':
-    pass
+    credentials = credentials()
+
+    fred_series_to_capture = ['T10Y2Y','DFF','BAMLH0A0HYM2','SP500','BAMLH0A0HYM2EY','DCOILWTICO','DTWEXBGS','VIXCLS','DJIA','NASDAQCOM','T10Y3M']
+
+    dataset = capture_fred_series(fred_series_to_capture=fred_series_to_capture, fred_api_key=credentials['FRED API Key'][0])
+
+    # Verify integrity just checks that the dataframe has no duplicate dates
+    dataset.set_index(keys='date', inplace=True, drop=True, verify_integrity=True)
+    # Remove all weekends from the data set since they are irrelevant
+    dataset = dataset[dataset.index.dayofweek < 5]
+
+    dataset.to_csv(os.path.join('data','dataset_raw.csv'))
