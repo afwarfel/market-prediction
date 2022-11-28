@@ -79,7 +79,10 @@ def solicit_inferences(fred_api_key):
         prediction_df = pd.DataFrame(
             {'date': most_recent_records.index, 'prediction': prediction})
 
-    prediction_df.to_csv(os.path.join('data', 'prediction.csv'), index=False)
+    try:
+        prediction_df.to_csv(os.path.join('data', 'prediction.csv'), index=False)
+    except:
+        prediction_df.to_csv(os.path.join('machine_learning', 'data', 'prediction.csv'), index=False)
 
     print(prediction_df)
 
