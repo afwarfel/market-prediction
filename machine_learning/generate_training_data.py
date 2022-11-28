@@ -102,3 +102,6 @@ dataset.set_index(keys='date', inplace=True, drop=True, verify_integrity=True)
 dataset = dataset[dataset.index.dayofweek < 5]
 
 dataset.to_csv(os.path.join('data','dataset_raw.csv'))
+
+if __name__ == '__main__':
+    pass
