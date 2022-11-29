@@ -8,9 +8,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+        <div>This is a deployment test</div>
+        <h1>
           See daily predictions below:
-        </p>
+        </h1>
       <LineChartW/>
       </header>
     </div>
