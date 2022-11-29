@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <div>This is a deployment test</div>
+        <div>This is a deployment test2</div>
         <h1>
           See daily predictions below:
         </h1>
