@@ -31,4 +31,4 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy to S3 bucket
-        run: aws s3 sync ./react/price-prediction s3://stock-market-prediction-front-end --delete
+        run: aws s3 sync ./react/price-prediction/build s3://stock-market-prediction-front-end --delete
