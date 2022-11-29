@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checking out code
         uses: actions/checkout@v3
+        working-directory: ./react/price-prediction
       - name: Installing Node.js
         uses: actions/setup-node@v3
         with:
