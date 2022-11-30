@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import LineChartW from './LineChartW'
+import data from 'inferences.csv'
 
 function App() {
   return (
