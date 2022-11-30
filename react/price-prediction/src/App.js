@@ -1,9 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import LineChartW from './LineChartW'
+import data from './data/inferences.json'
 
 function App() {
 
+  console.log(data)
 
   return (
     <>

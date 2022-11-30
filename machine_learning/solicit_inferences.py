@@ -19,7 +19,7 @@ def check_s3_bucket_for_previous_predictions(aws_access_key_id, aws_secret_acces
     inferences = pd.DataFrame(columns=['date','prediction'])
 
     try:
-        inferences = s3.Object(bucket_name, 'data/inferences.json').load()
+        inferences = pd.read_json(s3.Object(bucket_name, 'data/inferences.json').get()['Body'])
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
             print('No previous predictions found in S3 bucket.')
@@ -27,7 +27,7 @@ def check_s3_bucket_for_previous_predictions(aws_access_key_id, aws_secret_acces
             raise ValueError('Error accessing S3 bucket.')
     else:
         print('Previous predictions found in S3 bucket. Downloading...')
-        inferences = json.load(s3.Object(bucket_name, 'data/inferences.json').get()['Body'])
+        inferences = pd.read_json(s3.Object(bucket_name, 'data/inferences.json').get()['Body'])
         
     return inferences
 
@@ -130,5 +130,3 @@ if __name__ == '__main__':
     aws_bucket_name = str(sys.argv[4])
 
     solicit_inferences(fred_api_key=fred_api_key, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, bucket_name=aws_bucket_name)
-    # i = check_s3_bucket_for_previous_predictions(aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key, bucket_name=aws_bucket_name)
-    # print(i)
