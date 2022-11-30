@@ -1,9 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import LineChartW from './LineChartW'
-import data from 'inferences.csv'
+import data from 'data/inferences.csv'
 
 function App() {
+
+  console.log(data)
+
   return (
     <>
     <div className="App">
