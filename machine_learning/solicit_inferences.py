@@ -9,6 +9,7 @@ import numpy as np
 import boto3
 import botocore
 from io import StringIO
+import json
 
 def check_s3_bucket_for_previous_predictions(aws_access_key_id, aws_secret_access_key, bucket_name):
 
@@ -18,7 +19,7 @@ def check_s3_bucket_for_previous_predictions(aws_access_key_id, aws_secret_acces
     inferences = pd.DataFrame(columns=['date','prediction'])
 
     try:
-        inferences = s3.Object(bucket_name, 'data/inferences.csv').load()
+        inferences = s3.Object(bucket_name, 'data/inferences.json').load()
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] == "404":
             print('No previous predictions found in S3 bucket.')
@@ -26,7 +27,7 @@ def check_s3_bucket_for_previous_predictions(aws_access_key_id, aws_secret_acces
             raise ValueError('Error accessing S3 bucket.')
     else:
         print('Previous predictions found in S3 bucket. Downloading...')
-        inferences = pd.read_csv(s3.Object(bucket_name, 'data/inferences.csv').get()['Body'])
+        inferences = json.load(s3.Object(bucket_name, 'data/inferences.json').get()['Body'])
         
     return inferences
 
@@ -36,8 +37,8 @@ def upload_inferences_to_s3(aws_access_key_id, aws_secret_access_key, bucket_nam
                         aws_secret_access_key=aws_secret_access_key)
 
     csv_buffer = StringIO()
-    inferences.to_csv(csv_buffer, index=False)
-    s3.Object(bucket_name, 'data/inferences.csv').put(ACL='public-read',Body=csv_buffer.getvalue())
+    inferences.to_json(csv_buffer, index=False)
+    s3.Object(bucket_name, 'data/inferences.json').put(ACL='public-read',Body=csv_buffer.getvalue())
 
 def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, bucket_name):
 
