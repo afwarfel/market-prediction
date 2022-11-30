@@ -5,8 +5,11 @@ name: solicit-inferences
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  schedule:
-    - cron: '30 20 * * 1-5'
+  # schedule:
+  #   - cron: '30 20 * * 1-5'
+  push:
+    branches:
+      - main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,4 +31,4 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: solicit predictions # run file
         run: |
-          python3 machine_learning/solicit_inferences.py ${{ secrets.FRED_API_KEY }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} ${{ secrets.AWS_BUCKET_NAME }}
+          python3 machine_learning/solicit_inferences.py ${{ secrets.FRED_API_KEY }} ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }} stock-market-prediction-front-end
