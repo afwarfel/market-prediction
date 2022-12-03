@@ -4,9 +4,13 @@ name: solicit-inferences
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
+# on:
+#   schedule:
+#     - cron: '30 20 * * 1-5'
 on:
-  schedule:
-    - cron: '30 20 * * 1-5'
+  push:
+    branches:
+      - main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
