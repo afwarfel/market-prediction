@@ -35,7 +35,7 @@ def upload_inferences_to_s3(aws_access_key_id, aws_secret_access_key, bucket_nam
                         aws_secret_access_key=aws_secret_access_key)
 
     csv_buffer = StringIO()
-    inferences.to_json(csv_buffer)
+    inferences.to_json(csv_buffer,orient='records')
     s3.Object(bucket_name, 'data/'+file_name+'.json').put(ACL='public-read',Body=csv_buffer.getvalue())
 
 def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, bucket_name):

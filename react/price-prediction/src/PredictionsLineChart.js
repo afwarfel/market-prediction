@@ -6,8 +6,8 @@ export const PredictionsLineChart = (data) => {
   data = data.data.map((d) => {
     return {
       date: d.date,
-      prediction: (Math.round((d.prediction*100)*100)/100),
-      nasdaq_percent_change: (Math.round((d.nasdaq_percent_change*100)*100)/100)
+      prediction: d.prediction===null?null:(Math.round((d.prediction*100)*100)/100),
+      nasdaq_percent_change: d.nasdaq_percent_change===null?null:(Math.round((d.nasdaq_percent_change*100)*100)/100)
     }})
 
     console.log('data',data)
