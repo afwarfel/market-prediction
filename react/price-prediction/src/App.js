@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import PredictionsLineChart from './PredictionsLineChart'
-import regressor_inferences from './data/regressor_inferences.json'
+import regressor_inferences from 'https://stock-market-prediction-front-end.s3.us-west-2.amazonaws.com/data/regressor_inferences.json';
 
 const App = () => {
 
