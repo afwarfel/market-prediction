@@ -10,13 +10,9 @@ export const PredictionsLineChart = (data) => {
       nasdaq_percent_change: d.nasdaq_percent_change===null?null:(Math.round((d.nasdaq_percent_change*100)*100)/100)
     }})
 
-    console.log('data',data)
-
     return (
-      <ResponsiveContainer width={800} height={800}>
+      <ResponsiveContainer width={'80%'} height={800}>
         <LineChart
-          width={1500}
-          height={1300}
           data={data}
           margin={{
             top: 5,

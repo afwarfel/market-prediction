@@ -35,6 +35,7 @@ def upload_inferences_to_s3(aws_access_key_id, aws_secret_access_key, bucket_nam
                         aws_secret_access_key=aws_secret_access_key)
 
     csv_buffer = StringIO()
+    inferences['date'] = pd.to_datetime(inferences['date']).dt.strftime('%m/%d/%Y')
     inferences.to_json(csv_buffer,orient='records')
     s3.Object(bucket_name, 'data/'+file_name+'.json').put(ACL='public-read',Body=csv_buffer.getvalue())
 
