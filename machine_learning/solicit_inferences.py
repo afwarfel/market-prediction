@@ -5,6 +5,7 @@ from os import path
 from generate_training_data import capture_fred_series
 import ta
 import pandas as pd
+from pandas.tseries.offsets import BDay
 import numpy as np
 import boto3
 import botocore
@@ -95,6 +96,11 @@ def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, b
             dataset[technical_analysis_column +
                     '_diff'] = dataset[technical_analysis_column].diff()
 
+    # We want to remove the Nasdaq from the data we are going to predict on, but we want to keep it stored elsewhere so we can join it back onto our prediction set so we can track the accuracy of our predictions going forward.
+    nasdaq_data = dataset[['nasdaqcom']].copy()
+    nasdaq_data['nasdaq_percent_change'] = nasdaq_data['nasdaqcom'].pct_change()
+    nasdaq_data.dropna(inplace=True)
+
     dataset.drop(columns=['nasdaqcom'], inplace=True)
 
     def narrow_dataset_to_most_recent_records_and_required_columns(dataset,trained_columns):
@@ -105,15 +111,27 @@ def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, b
     most_recent_records_classifier = narrow_dataset_to_most_recent_records_and_required_columns(dataset,trained_columns_classifier)
     most_recent_records_regressor = narrow_dataset_to_most_recent_records_and_required_columns(dataset,trained_columns_regressor)
 
-    def make_predictions(most_recent_records,trained_model,file_name):
+    def make_predictions(most_recent_records,trained_model,file_name,nasdaq_data):
         prediction = trained_model.predict(most_recent_records)
 
         print('Checking for previous predictions in S3 bucket...')
         prediction_df = check_s3_bucket_for_previous_predictions(
             aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, bucket_name=bucket_name, file_name=file_name)
 
+        # If this is the first prediction, the nasdaq columns will not already exist in the dataframe, therefore they should be wrapped in a try except for removal.
+        try:
+            prediction_df.drop(columns=['nasdaqcom','nasdaq_percent_change'], inplace=True)
+        except:
+            pass
+
         prediction_df['date'] = pd.to_datetime(prediction_df['date'])
         most_recent_records.index = pd.to_datetime(most_recent_records.index)
+
+        # We need to offset the date of the prediction so that way it is for the next date, but we also need to ensure that this date is for the next trading day, which can be simplified by assuming that the next trading day is also the next weekday. This is obviously not always true for holidays, but this is a demo.
+        most_recent_records['date'] = most_recent_records.index
+        most_recent_records['date'] = most_recent_records['date'] + pd.DateOffset(1)
+        most_recent_records['date'] = most_recent_records['date'].map(lambda x : x + 0*BDay())
+        most_recent_records.set_index(keys='date', inplace=True, drop=True, verify_integrity=True)
 
         if most_recent_records.index[0] in prediction_df['date'].values:
             print('Most recent prediction already exists in S3 bucket.')
@@ -122,14 +140,17 @@ def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, b
             print('Most recent prediction does not exist in S3 bucket. Adding...')
             prediction_df = pd.concat([prediction_df, pd.DataFrame({'date': most_recent_records.index[0], 'prediction': prediction[0]},index=[0])], axis=0, ignore_index=True)
 
+        # Since we have stripped out the observed Nasdaq columns in previous lines, we need to add it back in.
+        prediction_df = prediction_df.merge(nasdaq_data, how='left', left_on='date', right_index=True)
+
         print('Saving predictions to S3 bucket...')
         upload_inferences_to_s3(
             inferences=prediction_df, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, bucket_name=bucket_name, file_name=file_name)
 
         print(prediction_df)
 
-    make_predictions(most_recent_records_classifier,classifier_model,'classifier_inferences')
-    make_predictions(most_recent_records_regressor,regressor_model,'regressor_inferences')
+    make_predictions(most_recent_records_classifier,classifier_model,'classifier_inferences',nasdaq_data)
+    make_predictions(most_recent_records_regressor,regressor_model,'regressor_inferences',nasdaq_data)
 
     return
 
