@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 /machine_learning/data/*
 !/machine_learning/data/*.joblib
+generate_fake_data.py
 
 # C extensions
 *.so
