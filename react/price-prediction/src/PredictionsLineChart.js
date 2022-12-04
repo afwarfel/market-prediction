@@ -15,10 +15,10 @@ export const PredictionsLineChart = (data) => {
         <LineChart
           data={data}
           margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
+            top: 50,
+            right: 100,
+            left: 100,
+            bottom: 50,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
