@@ -11,13 +11,13 @@ export const PredictionsLineChart = (data) => {
     }})
 
     return (
-      <ResponsiveContainer width={'80%'} height={800}>
+      <ResponsiveContainer width={'95%'} height={800}>
         <LineChart
           data={data}
           margin={{
             top: 50,
-            right: 100,
-            left: 100,
+            right: 30,
+            left: 30,
             bottom: 50,
           }}
         >
