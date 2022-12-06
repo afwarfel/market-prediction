@@ -16,8 +16,8 @@ export const PredictionsLineChart = (data) => {
           data={data}
           margin={{
             top: 50,
-            right: 30,
-            left: 30,
+            right: 55,
+            left: 55,
             bottom: 50,
           }}
         >
