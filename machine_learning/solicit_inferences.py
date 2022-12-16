@@ -99,7 +99,7 @@ def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, b
 
     # We want to remove the Nasdaq from the data we are going to predict on, but we want to keep it stored elsewhere so we can join it back onto our prediction set so we can track the accuracy of our predictions going forward.
     nasdaq_data = dataset[['nasdaqcom']].copy()
-    nasdaq_data['nasdaq_percent_change'] = nasdaq_data['nasdaqcom'].pct_change()
+    nasdaq_data['actual_percent_change'] = nasdaq_data['nasdaqcom'].pct_change()
     nasdaq_data.dropna(inplace=True)
 
     dataset.drop(columns=['nasdaqcom'], inplace=True)
@@ -121,7 +121,7 @@ def solicit_inferences(fred_api_key, aws_access_key_id, aws_secret_access_key, b
 
         # If this is the first prediction, the nasdaq columns will not already exist in the dataframe, therefore they should be wrapped in a try except for removal.
         try:
-            prediction_df.drop(columns=['nasdaqcom','nasdaq_percent_change'], inplace=True)
+            prediction_df.drop(columns=['nasdaqcom','actual_percent_change'], inplace=True)
         except:
             pass
 

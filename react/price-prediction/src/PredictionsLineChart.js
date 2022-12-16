@@ -7,7 +7,7 @@ export const PredictionsLineChart = (data) => {
     return {
       date: d.date,
       prediction: d.prediction===null?null:(Math.round((d.prediction*100)*100)/100),
-      nasdaq_percent_change: d.nasdaq_percent_change===null?null:(Math.round((d.nasdaq_percent_change*100)*100)/100)
+      actual_percent_change: d.actual_percent_change===null?null:(Math.round((d.actual_percent_change*100)*100)/100)
     }})
 
     return (
@@ -30,8 +30,8 @@ export const PredictionsLineChart = (data) => {
           <Legend wrapperStyle={{
         paddingTop: "40px"
     }}/>
-          <Line name='Predicted NASDAQ Return' type="monotone" dataKey="prediction" stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line name='Actual NASDAQ Return' type="monotone" dataKey="nasdaq_percent_change" stroke="#82ca9d" />
+          <Line name='Predicted Return' type="monotone" dataKey="prediction" stroke="#8884d8" activeDot={{ r: 8 }} />
+          <Line name='Actual Observed Return' type="monotone" dataKey="actual_percent_change" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     );};
