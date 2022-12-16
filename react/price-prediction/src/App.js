@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import logo from './logo.png'
 import "./App.css";
 import PredictionsLineChart from "./PredictionsLineChart";
+import MinutePredictionLineChart from './MinutePredictionLineChart'
 
 const App = () => {
   const [regressor_inferences, set_regressor_inferences] = useState([]);
@@ -42,7 +43,7 @@ const App = () => {
           <PredictionsLineChart data={data} />
           <br style={{ width: "100px" }} />
           <h2>15 Minute Level VTI Predictions</h2>
-          <PredictionsLineChart data={minute_level_data} />
+          <MinutePredictionLineChart data={minute_level_data} />
           <br />
           <a
             style={{ color: "#008DD5", padding: "50px" }}
